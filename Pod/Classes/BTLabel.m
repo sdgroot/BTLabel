@@ -134,19 +134,12 @@ const NSStringDrawingOptions kDrawingOptions = NSStringDrawingUsesLineFragmentOr
 	self = [super initWithFrame:frame];
 	
 	if (self) {
-		self.clipsToBounds = NO;
 		self.verticalAlignment = BTVerticalAlignmentCenter;
 		self.edgeInsets = edgeInsets;
-		self.font = [UIFont systemFontOfSize:12];
-		self.textColor = [UIColor blackColor];
-		self.backgroundColor = [UIColor clearColor];
-		self.lineBreakMode = NSLineBreakByWordWrapping;
-		self.numberOfLines = 0;
 	}
 	
 	return self;
 }
-
 
 #pragma mark - NSCoding protocol
 
@@ -177,7 +170,6 @@ const NSStringDrawingOptions kDrawingOptions = NSStringDrawingUsesLineFragmentOr
 	[aCoder encodeBool:self.decreasesFontSizeToFitNumberOfLines forKey:NSStringFromSelector(@selector(decreasesFontSizeToFitNumberOfLines))];
 	[aCoder encodeBool:self.increasesFontSizeToFitNumberOfLines forKey:NSStringFromSelector(@selector(increasesFontSizeToFitNumberOfLines))];
 }
-
 
 #pragma mark - Layout
 
@@ -354,6 +346,14 @@ const NSStringDrawingOptions kDrawingOptions = NSStringDrawingUsesLineFragmentOr
 	}
 	
 	return CGSizeMake(ceilf(width), ceilf(height));
+}
+
+- (CGSize)intrinsicContentSize
+{
+	CGSize returnSize = [super intrinsicContentSize];
+	returnSize.width += self.edgeInsets.left + self.edgeInsets.right;
+	returnSize.height += self.edgeInsets.top + self.edgeInsets.bottom;
+	return returnSize;
 }
 
 //
